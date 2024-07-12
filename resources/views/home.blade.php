@@ -4,8 +4,8 @@
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-12">
-                <div class="card">
-                    <div class="card-header">{{ __('ข่าวประกาศ') }}</div>
+                <div class="card shadow mb-4">
+                    <div class="card-header bg-sci py-3 text-white">{{ __('ข่าวประกาศ') }}</div>
 
                     <div class="card-body">
                         @if (session('status'))

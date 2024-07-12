@@ -17,7 +17,7 @@
     <meta name="theme-color" content="#ffffff">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>{{ config('app.name', 'Young Smart') }}</title>
 
     <!-- Custom fonts for this template-->
     <link href="{{ asset('vendor/fontawesome-free/css/all.min.css') }}" rel="stylesheet" type="text/css">
@@ -39,13 +39,13 @@
     <div id="wrapper">
 
         <!-- Sidebar -->
-        <ul class="navbar-nav bg-gradient-abi sidebar sidebar-dark accordion" id="accordionSidebar">
+        <ul class="navbar-nav bg-gradient-sci sidebar sidebar-dark accordion" id="accordionSidebar">
 
             <!-- Sidebar - Brand -->
             <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{{ url('/') }}">
                 <div class="sidebar-brand-icon ">
                 {{-- <i class="fas fa-laugh-wink"></i> --}}
-                <img src="{{ asset('img/Logoabi150.png') }}" alt="..." height="50px">
+                <img src="{{ asset('img/science_th.png') }}" alt="..." height="50px">
                 </div>
                 
             </a>
@@ -60,7 +60,7 @@
             <div id="content">
 
                 <!-- Topbar -->
-                <nav class="navbar navbar-expand navbar-light bg-abi  topbar mb-4 static-top shadow">
+                <nav class="navbar navbar-expand navbar-dark bg-sci  topbar mb-4 static-top shadow">
 
                     <!-- Sidebar Toggle (Topbar) -->
                     <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
@@ -68,7 +68,7 @@
                     </button>
 
                     <!-- Topbar Search -->
-                    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{{ url('/') }}">
+                    <a class=" sidebar-brand d-flex align-items-center justify-content-center" href="{{ url('/') }}">
                     <div class="sidebar-brand-text text-white mx-3 h3">{{ config('app.name', 'Laravel') }}</div>
                     </a>
                     <!-- Topbar Navbar -->

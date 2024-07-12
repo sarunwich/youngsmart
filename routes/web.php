@@ -32,8 +32,8 @@ Route::get('/registdata', [MyController::class, 'registdata'])->name('registdata
 
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-Route::get('/contact', function () {return view('frontend.contact');});
+Route::get('/user/home', [App\Http\Controllers\HomeController::class, 'index'])->name('user.home');
+Route::get('/user/contact', function () {return view('frontend.contact');})->name('user.contact');
 Route::get('user/news', [HomeController::class, 'news'])->name('user.news');
 Route::get('user/project', [HomeController::class, 'project'])->name('user.project');
 Route::get('user/courses', [HomeController::class, 'courses'])->name('user.courses');
@@ -58,7 +58,7 @@ Route::middleware(['auth', 'isAdmin'])->group(function () {
     Route::delete('/data/{id}',[PublicRelationController::class,'destroy'])->name('data.destroy');
     Route::get('getfile/{path}/{file_name}', [AdminController::class, 'downloadFile']);
     Route::post('admin/PrUpstatus',[PublicRelationController::class, 'PrUpstatus']);
-
+    Route::get('admin/contact', function () {return view('admin.contact');})->name('admin.contact');
     Route::get('admin/project',[AdminController::class, 'project'])->name('admin.project');
     Route::post('addproject/project',[AdminController::class, 'addproject'])->name('addproject.create');
 

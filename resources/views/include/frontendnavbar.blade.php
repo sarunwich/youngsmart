@@ -1,7 +1,7 @@
-<nav class="sb-topnav navbar navbar-expand navbar-pink bg-pink">
+<nav class="sb-topnav navbar navbar-expand navbar-light bg-sci">
     <!-- Navbar Brand-->
     <a class="navbar-brand" href="{{ url('/') }}">
-        <img src="https://placeholder.pics/svg/150x50/888888/EEE/Logo" alt="..." height="36">{{ config('app.name', 'Laravel') }}
+        <img src="https://placeholder.pics/svg/150x50/888888/EEE/Logo" alt="..." height="36">{{ config('app.name', 'Young Smart') }}
     </a>
     {{-- <a class="navbar-brand ps-3" href="index.html">Start Bootstrap</a> --}}
     <!-- Sidebar Toggle-->

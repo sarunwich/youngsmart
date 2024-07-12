@@ -6,7 +6,7 @@
 
     <!-- Nav Item - Dashboard -->
     <li class="nav-item ">
-        <a class="nav-link" href="{{url('/')}}">
+        <a class="nav-link" href="{{url('/admin')}}">
             <i class="fas fa-fw fa-tachometer-alt"></i>
             <span>Dashboard</span></a>
     </li>
@@ -56,7 +56,7 @@
     <!-- Divider -->
     <hr class="sidebar-divider">
     <li class="nav-item">
-        <a class="nav-link" href="{{url('/contact')}}">
+        <a class="nav-link" href="{{route('admin.contact')}}">
             <i class="fas fa-phone"></i>
             <span>ติดต่อเรา</span></a>
     </li>

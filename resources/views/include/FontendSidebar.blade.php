@@ -56,7 +56,7 @@
     <!-- Divider -->
     <hr class="sidebar-divider">
     <li class="nav-item">
-        <a class="nav-link" href="{{url('/contact')}}">
+        <a class="nav-link" href="{{url('/user/contact')}}">
             <i class="fas fa-phone"></i>
             <span>ติดต่อเรา</span></a>
     </li>
