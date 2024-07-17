@@ -17,6 +17,7 @@
             justify-content: center;
         }
     </style>
+    <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
 @endpush
 @section('content')
 <div class="d-sm-flex align-items-center justify-content-between mb-4">
@@ -32,7 +33,7 @@
 
                 <div class="card-body">
                     <span id="addnew" class="customhidden">
-                        <div class="col-md-6">
+                        <div class="col-md-12">
                             <div class="card">
                                 <div class="card-header">{{ __('ข่าวประชาสัมพันธ์') }}
                                 </div>
@@ -89,7 +90,7 @@
                                     <td>{{ $key + 1 }}</td>
                                     <td>{{ $new->pr_title }}</td>
                                     <td>
-                                        <pre>{{ $new->pr_detail }}</pre>
+                                        <pre>{!! $new->pr_detail !!}</pre>
                                     </td>
                                     <td>{{ $new->pr_date }}</td>
                                     <td>
@@ -135,6 +136,14 @@
 </div>
 @endsection
 @push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#pr_detail').summernote({
+            height: 450,
+        });
+    });
+</script>
     <script>
         function addnew() {
             // document.getElementById("addnew").style.display = 'block';

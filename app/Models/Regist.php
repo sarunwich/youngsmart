@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Course;
+use App\Models\Project;
 
 class Regist extends Model
 {
@@ -25,4 +27,10 @@ class Regist extends Model
         'guidance_teacher',
         'portfolio_file',
     ];
+    public function course() {
+        return $this->belongsToMany(Course::class,);
+   }
+   public function project() {
+    return $this->belongsToMany(Project::class,);
+}
 }

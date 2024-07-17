@@ -17,7 +17,7 @@ class CreateProjectsTable extends Migration
             $table->id();
             $table->string('Projectname',255)->nullable();
             $table->string('Projectfile',255)->nullable();
-            $table->text('Projectdetail')->nullable();
+            $table->longText('Projectdetail')->nullable();
             $table->string('tcas',20)->nullable();
             $table->string('year',20)->nullable();
             $table->string('status',2)->nullable();

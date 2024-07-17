@@ -122,7 +122,7 @@ class HomeController extends Controller
             // Add more columns and values as needed
         ];
         $status_update = Regist::insert($data);
-        return redirect('/home');
+        return redirect('user/home');
 
     }
     public function registdetail()

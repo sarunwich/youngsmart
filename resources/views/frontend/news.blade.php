@@ -17,7 +17,7 @@
 
                                         <h4><strong>{{ $new->pr_title }}</strong></h4>
                                         <p class="text-muted">
-                                            {{ $new->pr_detail }}
+                                            {!! $new->pr_detail !!}
                                         </p>
                                         @if ($new->pr_file)
                                             <a class="btn btn-outline-success"

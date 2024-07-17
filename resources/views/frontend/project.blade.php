@@ -13,7 +13,7 @@
                     @if ($project->status == 1)
                         <tr>
                             <td>{{ $project->Projectname }}</td>
-                            <td> {{ $project->Projectdetail }}</td>
+                            <td> {!!$project->Projectdetail !!}</td>
                             <td> <a class="btn btn-outline-success"
                                     href="{{ url('viewfile/Projectfile/' . $project->Projectfile) }}"><i
                                         class="bi bi-download"></i></a></td>

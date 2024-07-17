@@ -6,11 +6,14 @@ use App\Http\Controllers\Controller;
 use App\Models\Course;
 use App\Models\Project;
 use App\Models\Regist;
+use App\Models\User;
 use Haruncpi\LaravelIdGenerator\IdGenerator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\SendMail;
 
 class AdminController extends Controller
 {
@@ -149,13 +152,42 @@ class AdminController extends Controller
     }
     public function upstatus(Request $request)
     {
-        Regist::where('id', $request->idreg)
-            ->update(
+        $regist=Regist::where('id', $request->idreg)->first();
+        $user=User::where('id', '=',$regist['iduser'])->first();
+
+        $regist->update(
                 [
                     'std_status' => $request->updstatus,
                 ]
             );
-        return redirect()->back()->with('status', 'Updated Successfully');
+            switch ($request->updstatus) {
+                case 2:
+                  $status="ยื่นชำระเงินอีกครั้ง";
+                  break;
+                case 3:
+                    $status="ชำระเงินเรียบร้อยรอผลการสมัคร";
+                  break;
+                case 4:
+                    $status="ผ่าน";
+                  break;
+                default:
+                  //code block
+              }
+          
+            $email = $user['email'];
+            $name = $user['name'];
+            $SendMailData = [
+                'title' => 'แจ้งสถานะการสมัครเรียนผ่านระบบ '.env('APP_NAME'),
+                'body' => 'เรียนคุณ' . $name . ' ได้สมัครเรียนผ่านระบบ'.env('APP_NAME'),
+               
+                'status' => ':: ' .$status . '',
+                'URL' => 'ท่านสามารถตรวจสอบได้ทาง ' . env('APP_URL') . ' ข้อมูลผู้สมัคร',
+    
+            ];
+    
+            Mail::to($email)->send(new SendMail($SendMailData));
+
+        return redirect()->back()->with('status', 'Updated Successfully'.$user['id']);
 
     }
     public function Prteacher(Request $request)

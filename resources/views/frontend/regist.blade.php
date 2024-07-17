@@ -114,8 +114,9 @@
                                                 placeholder="กรุณาเลือกไฟล์" class="form-control" accept=".pdf">
                                             <span class="input-group-text" id="basic-addon2"><i
                                                     class="bi bi-filetype-pdf"></i></span>
-                                        </div>
 
+                                        </div>
+                                        <small class="text-muted">ชนิดไฟล์ เป็น PDF.</small>
                                     </div>
                                 </div>
                                 <div class="row">
@@ -129,13 +130,15 @@
                                                     class="bi bi-filetype-pdf"></i></span>
 
                                         </div>
+                                        <small class="text-muted">ชนิดไฟล์ เป็น PDF.</small>
                                     </div>
                                     <div class="col-6 mb-4 " id="teacher" style="display: none">
                                         <label class="form-label">เอกสารรับรองครูแนะแนว</label>
 
                                         <div class="input-group">
                                             <input type="file" placeholder="กรุณาเลือกไฟล์" class="form-control"
-                                                name="guidance_teacher" disabled id="guidance_teacher" required accept=".pdf">
+                                                name="guidance_teacher" disabled id="guidance_teacher" required
+                                                accept=".pdf">
                                             <span class="input-group-text" id="basic-addon2"><i
                                                     class="bi bi-filetype-pdf"></i></span>
 
@@ -154,9 +157,9 @@
                                             </div>
                                             <div align="center" class="indent2">ชำระเงินได้ที่ ธนาคารไทยพาณิชย์ </div>
                                             <div align="center" class="indent2">ขื่อบัญชี มหาวิทยาลัยทักษิณ
-                                                (คณะอุตสาหกรรมเกษตรและชีวภาพ)
-                                            </div>
-                                            <div align="center" class="indent2">เลขที่บัญชี 425-076304-6 </div>
+                                                (คณะวิทยาศาสตร์)</div>
+                                            <div align="center" class="indent2">เลขที่บัญชี 425-076285-4 </div>
+
                                             <div class="form-check">
                                                 <input class="form-check-input required" type="checkbox"
                                                     name="checkbox_hobby2" id="hobby2" value="1" required>

@@ -17,6 +17,7 @@
             justify-content: center;
         }
     </style>
+     <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
 @endpush
 @section('content')
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
@@ -32,7 +33,7 @@
 
                     <div class="card-body">
                         <span id="addproject" class="customhidden">
-                            <div class="col-md-6">
+                            <div class="col-md-12">
                                 <div class="card">
                                     <div class="card-header">{{ __('รายละเอียดโครงการ') }}
                                     </div>
@@ -117,7 +118,7 @@
                                         <td>{{ $key + 1 }}</td>
                                         <td>{{ $project->Projectname }}</td>
                                         <td>
-                                            <pre>{{ $project->Projectdetail }}</pre>
+                                            <pre>{!! $project->Projectdetail !!}</pre>
                                         </td>
                                         <td>{{ $project->tcas }}</td>
                                         <td>{{ $project->year }}</td>
@@ -175,6 +176,14 @@
     </div>
 @endsection
 @push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#Projectdetail').summernote({
+            height: 450,
+        });
+    });
+</script>
     <script>
         function addproject() {
             // document.getElementById("addproject").style.display = 'block';

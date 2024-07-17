@@ -16,7 +16,7 @@ class CreatePublicRelationsTable extends Migration
         Schema::create('public_relations', function (Blueprint $table) {
             $table->id();
             $table->string('pr_title',255)->nullable();
-            $table->string('pr_detail',255)->nullable();
+            $table->longText('pr_detail')->nullable();
             $table->dateTime('pr_date')->nullable();
             $table->string('pr_file',255)->nullable();
             $table->string('pr_staus',2)->nullable();
