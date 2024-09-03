@@ -54,7 +54,7 @@
                     <div class="faded"> <span class="icon-envelope"></span> 
                         {{-- <span
                             class="text">sarawanee.s@tsu.ac.th</span> --}}
-                        <p> <span class="icon-phone2"></span><i class="fa fa-mobile" ></i> <span class="text">087-924-6630</span> </p>
+                        <p> <span class="icon-phone2"></span><i class="fa fa-mobile" ></i> <span class="text">097-924-6630</span> </p>
                         <!--<p>I am an ambitious workaholic, but apart from that, pretty simple person.</p>
                       <ul class="ftco-social text-center">
                         <li class="ftco-animate"><a href="#"><span class="icon-twitter"></span></a></li>

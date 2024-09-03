@@ -16,6 +16,12 @@
             <i class="fas fa-newspaper"></i>
             <span>ข่าวประกาศ</span></a>
     </li>
+    <li class="nav-item {{Route::is('admin.config') ? 'active' : ''}}">
+        <a class="nav-link " href="{{route('admin.config')}}">
+            {{-- <i class="fas fa-fw fa-chart-area"></i> --}}
+            <i class="fas fa-user-cog"></i>
+            <span>อาจารย์ดูแลหลักสูตร</span></a>
+    </li>
     <!-- Divider -->
     <hr class="sidebar-divider">
     <!-- Heading -->
@@ -41,12 +47,12 @@
     {{-- <li class="nav-item">
         <a class="nav-link" href="charts.html">
             <i class="fas fa-marker"></i>
-            <span>สมัครออนไล์</span></a>
+            <span>สมัครออนไลน์</span></a>
     </li> --}}
     <li class="nav-item class="nav-item {{Route::is('admin.regist') ? 'active' : ''}}">
         <a class="nav-link" href="{{route('admin.regist')}}">
             <i class="fas fa-id-card"></i>
-            <span>ข้อมูผู้สมัคร</span></a>
+            <span>ข้อมูลผู้สมัคร</span></a>
     </li>
     <li class="nav-item class="nav-item {{Route::is('admin.exam_results') ? 'active' : ''}}">
         <a class="nav-link" href="{{route('admin.exam_results')}}">

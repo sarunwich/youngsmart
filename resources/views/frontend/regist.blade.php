@@ -1,5 +1,11 @@
 @extends('layouts.frontendlayout')
-
+@push('style')
+    <style>
+        .required {
+            color: red;
+        }
+    </style>
+@endpush
 @section('content')
     {{-- <div class="d-sm-flex align-items-center justify-content-between mb-4">
     <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
@@ -17,7 +23,7 @@
                                 @csrf
                                 <div class="row">
                                     <div class="col-6 mb-4">
-                                        <label class="form-label">โครงการ</label>
+                                        <label class="form-label">โครงการ <span class="required">*</span></label>
                                         <select class="form-control" onchange="checkteacher(this.value)" name="project">
                                             <option value="">เลือกโครงการ</option>
                                             @foreach ($projects as $key => $project)
@@ -30,7 +36,7 @@
                                         </select>
                                     </div>
                                     <div class="col-6 mb-4">
-                                        <label class="form-label">หลักสูตร</label>
+                                        <label class="form-label">หลักสูตร <span class="required">*</span></label>
                                         <select class="form-control" name="courses">
                                             <option value="">เลือกหลักสูตร</option>
                                             @foreach ($courses as $key => $course)
@@ -58,7 +64,7 @@
                                 <div class="row">
                                     <div class="col-12">
                                         <label for="input_tel" class="form-label">ข้อมูลติดต่อ
-                                            Facebook
+                                            Facebook <span class="required">*</span>
                                         </label>
 
                                         <input type="text" class="form-control" name="facebook" id="facebook"
@@ -74,7 +80,7 @@
                                 <div class="row">
                                     <div class="col-12">
                                         <label for="input_tel" class="form-label">ข้อมูลติดต่อ ID
-                                            Line
+                                            Line <span class="required">*</span>
                                         </label>
 
                                         <input type="text" class="form-control" name="line" id="line"
@@ -98,25 +104,27 @@
                                             <input type="text" id="_picFile" class="form-control d-none" value="">
                                             <div class="invalid-feedback"> กรุณาเลือกไฟล์ </div> --}}
 
-                                            <input type="file" required accept="image/*" name="picFile"
+                                            <input type="file"  accept="image/*" name="picFile"
                                                 placeholder="กรุณาเลือกไฟล์" class="form-control" />
                                             <span class="input-group-text" id="basic-addon2"><i
                                                     class="bi bi-file-earmark-image"></i></span>
                                         </div>
-
+                                        <small class="text-muted required"><span
+                                                class="required">สามารถอัปโหลดได้ภายหลัง</span></small>
                                     </div>
 
                                     <div class="col-6 mb-4">
-                                        <label class="form-label">อัพโหลดผลการเรียน</label>
+                                        <label class="form-label">อัปโหลดผลการเรียน</label>
 
                                         <div class="input-group">
-                                            <input type="file" required name="customFile" id="customFile"
+                                            <input type="file" name="customFile" id="customFile"
                                                 placeholder="กรุณาเลือกไฟล์" class="form-control" accept=".pdf">
                                             <span class="input-group-text" id="basic-addon2"><i
                                                     class="bi bi-filetype-pdf"></i></span>
 
                                         </div>
-                                        <small class="text-muted">ชนิดไฟล์ เป็น PDF.</small>
+                                        <small class="text-muted ">ชนิดไฟล์ เป็น PDF. <span class="required">
+                                                สามารถอัปโหลดได้ภายหลัง </span></small>
                                     </div>
                                 </div>
                                 <div class="row">
@@ -124,25 +132,27 @@
                                         <label class="form-label">ไฟล์ผลงาน</label>
 
                                         <div class="input-group">
-                                            <input type="file" placeholder="กรุณาเลือกไฟล์" class="form-control" required
+                                            <input type="file" placeholder="กรุณาเลือกไฟล์" class="form-control"
                                                 name="portfolio_file" id="portfolio_file" accept=".pdf">
                                             <span class="input-group-text" id="basic-addon2"><i
                                                     class="bi bi-filetype-pdf"></i></span>
 
                                         </div>
-                                        <small class="text-muted">ชนิดไฟล์ เป็น PDF.</small>
+                                        <small class="text-muted ">ชนิดไฟล์ เป็น PDF. <span
+                                                class="required">สามารถอัปโหลดได้ภายหลัง</span></small>
                                     </div>
                                     <div class="col-6 mb-4 " id="teacher" style="display: none">
                                         <label class="form-label">เอกสารรับรองครูแนะแนว</label>
 
                                         <div class="input-group">
                                             <input type="file" placeholder="กรุณาเลือกไฟล์" class="form-control"
-                                                name="guidance_teacher" disabled id="guidance_teacher" required
-                                                accept=".pdf">
+                                                name="guidance_teacher" disabled id="guidance_teacher" accept=".pdf">
                                             <span class="input-group-text" id="basic-addon2"><i
                                                     class="bi bi-filetype-pdf"></i></span>
 
                                         </div>
+                                        <small class="text-muted ">ชนิดไฟล์ เป็น PDF. <span
+                                                class="required">สามารถอัปโหลดได้ภายหลัง</span></small>
                                     </div>
                                 </div>
                                 <br>

@@ -38,19 +38,29 @@
                                 title="ดูรายละเอียด"><samp><i class="bi bi-eye-fill"></i>
                                 </samp></button>
                         </td>
-                        <td>{{ $regist->p }}{{ $regist->name }}</td>
+                        <td>{{ $regist->p }}{{ $regist->name }}
+                            {{-- {{ $regist->stdpic }}
+                            <img alt="Product Image" class="w-100" src="{{ asset('storage/' . $regist->stdpic) }}" /> --}}
+                        </td>
                         <td>{{ $regist->Projectname }}</td>
                         <td> {{ $regist->Cosename }}</td>
                         <td>
                             @if ($regist->payment)
+                                <a class="btn btn-outline-success view-payment-btn"
+                                data-bs-toggle="modal"
+                                data-bs-target="#detailModal{{ $key }}">
+                                    <i class="bi bi-cash-stack"></i>
+                                </a>
+                               
                                 <a class="btn btn-outline-success"
                                     href="{{ url('viewfile/payment/' . $regist->payment) }}"><i
-                                        class="bi bi-cash-stack"></i></a>
+                                        class="fas fa-download"></i></a>
                                 {{ $regist->dateup_p }}
                             @endif
 
                         </td>
-                        <td>{{ $regist->std_status }}
+                        <td>
+                            {{-- {{ $regist->std_status }} --}}
                             @if ($regist->std_status == null)
                                 รอเอกสารชำระเงิน
                             @elseif($regist->std_status == 1)
@@ -65,7 +75,8 @@
                             <form action="{{ route('admin.upstatus') }}" method="POST" enctype="multipart/form-data">
                                 @csrf
                                 <input name="idreg" id="idreg" type="hidden" value="{{ $regist->id }}">
-                                <select class="form-select" name="updstatus" onchange="this.form.submit()" aria-label="Default select example">
+                                <select class="form-select" name="updstatus" onchange="this.form.submit()"
+                                    aria-label="Default select example">
                                     <option selected>เลือกสถานะ</option>
                                     <option value="2">ยื่นเอกสารชำระเงินอีกครั้ง</option>
                                     <option value="3">ชำระเงินเรียบร้อย</option>
@@ -74,6 +85,29 @@
                             </form>
                         </td>
                     </tr>
+
+                    <!-- Modal detail-->
+                    <div class="modal fade" id="detailModal{{ $key }}" tabindex="-1"
+                    aria-labelledby="detailModalLabel{{ $key }}" aria-hidden="true">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title"
+                                    id="detailModalLabel{{ $key }}">รายละเอียด
+                                </h5>
+                                <button type="button" class="btn-close"
+                                    data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <img alt="Product Image" class="w-100" src="{{ asset('storage/payment/' . $regist->payment) }}" />
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary"
+                                    data-bs-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 @endforeach
             </tbody>
         </table>
@@ -91,6 +125,21 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body" id="viewregistsdetail">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="paymentModal" tabindex="-1" aria-labelledby="paymentModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg"> <!-- Use modal-lg for a larger modal -->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="paymentModalLabel">Payment Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center"> <!-- Center the image -->
+                    <img id="paymentImage" src="" alt="Payment Image" class="img-fluid">
+                    <!-- img-fluid for responsive image -->
                 </div>
             </div>
         </div>
@@ -133,6 +182,22 @@
                     //console.log(data.status + ':' + data.statusText,data.responseText);
                 });
 
+            });
+
+            /////
+            document.addEventListener('DOMContentLoaded', function() {
+                const paymentModal = new bootstrap.Modal(document.getElementById('paymentModal'));
+                const paymentImage = document.getElementById('paymentImage');
+
+                document.querySelectorAll('.view-payment-btn').forEach(button => {
+                    button.addEventListener('click', function() {
+                        const paymentUrl = this.getAttribute('data-payment-url');
+
+                        // Set the image src and show the modal
+                        paymentImage.src = paymentUrl;
+                        paymentModal.show();
+                    });
+                });
             });
         });
     </script>

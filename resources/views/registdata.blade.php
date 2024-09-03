@@ -31,7 +31,8 @@
                         <td>{{ $item->p }}{{ $item->name }}</td>
                         <td>{{ $item->Projectname }}</td>
                         <td>{{ $item->Cosename }}</td>
-                        <td>{{ $item->std_status }}
+                        <td>
+                            {{-- {{ $item->std_status }} --}}
                             @if ($item->std_status == null)
                                 รอเอกสารชำระเงิน
                             @elseif($item->std_status == 1)

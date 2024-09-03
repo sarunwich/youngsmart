@@ -28,12 +28,14 @@ class MyController extends Controller
     }
     public function project()
     {
-        $projects=Project::all();
+        $projects=Project::where('status','<>',0)->get();
         return view('project',compact('projects'));
     }
     public function courses()
     {
-        $courses=Course::all();
+        $courses=Course::where('status','<>',0)
+        ->where('delstatus','<>',1)
+        ->get();
         return view('course',compact('courses'));
     }
     public function result()

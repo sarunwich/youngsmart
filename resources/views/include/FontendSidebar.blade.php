@@ -41,7 +41,7 @@
     <li class="nav-item {{request()->path() == 'user/regist' ? 'active' : ''}}">
         <a class="nav-link" href="{{route('user.regist')}}">
             <i class="fas fa-marker"></i>
-            <span>สมัครออนไล์</span></a>
+            <span>สมัครออนไลน์</span></a>
     </li>
     <li class="nav-item {{request()->path() == 'user/registdetail' ? 'active' : ''}}">
         <a class="nav-link " href="{{route('user.registdetail')}}">

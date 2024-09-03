@@ -15,12 +15,30 @@ class CreateUsersSeeder extends Seeder
     {
         //
         $users = [
+            // [
+            //    'name'=>'Admin',
+            //    'email'=>'admin@tsu.ac.th',
+            //    'user_type'=>'Administrator',
+            //    'password'=> bcrypt('admin@123456'),
+            // ],
             [
-               'name'=>'Admin',
-               'email'=>'admin@tsu.ac.th',
-               'user_type'=>'Administrator',
-               'password'=> bcrypt('admin@123456'),
-            ]
+                'name'=>'Admin User',
+                'email'=>'admin@tsu.ac.th',
+                'type'=>1,
+                'password'=> bcrypt('admin@123456'),
+             ],
+             [
+                'name'=>'Manager User',
+                'email'=>'manager@tsu.ac.th',
+                'type'=> 2,
+                'password'=> bcrypt('admin@123456'),
+             ],
+             [
+                'name'=>'User',
+                'email'=>'user@tsu.ac.th',
+                'type'=>0,
+                'password'=> bcrypt('admin@123456'),
+             ],
         ];
     
         foreach ($users as $key => $user) {

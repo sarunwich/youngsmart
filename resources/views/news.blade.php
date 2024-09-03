@@ -13,12 +13,12 @@
       </div>
     </div> --}}
   
-    <div class="col-md-12 mb-8">
+    <div class="col-md-12 mb-8 ">
       {{-- <span class="badge bg-danger px-2 py-1 shadow-1-strong mb-3">News of the day</span> --}}
       <h4><strong>{{$new->pr_title}}</strong></h4>
-      <p class="text-muted">
+      <div class="text-muted summernote-content ">
         {!!$new->pr_detail!!}
-      </p>
+      </div>
       @if($new->pr_file)
       <a class="btn btn-outline-success"
       href="{{ url('viewfile/pr_file/' . $new->pr_file) }}"><i

@@ -24,6 +24,26 @@ class HomeController extends Controller
         $this->middleware('auth');
     }
 
+/**
+ * Show the application dashboard.
+ *
+ * @return \Illuminate\Contracts\Support\Renderable
+ */
+    public function adminHome()
+    {
+        return view('adminHome');
+    }
+
+    /**
+     * Show the application dashboard.
+     *
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function managerHome()
+    {
+        return view('manager.Home');
+    }
+
     /**
      * Show the application dashboard.
      *
@@ -35,6 +55,7 @@ class HomeController extends Controller
         $news = PublicRelation::all();
         return view('frontend.news', compact('news'));
     }
+
     public function news()
     {
         $news = PublicRelation::all();
@@ -42,12 +63,14 @@ class HomeController extends Controller
     }
     public function project()
     {
-        $projects = Project::all();
+        $projects = Project::where('status', '<>', 0)->get();
         return view('frontend.project', compact('projects'));
     }
     public function courses()
     {
-        $courses = Course::all();
+        $courses = Course::where('status', '<>', 0)
+            // ->where('delstatus', '<>', 1)
+            ->get();
         return view('frontend.course', compact('courses'));
     }
     public function regist()
@@ -63,9 +86,9 @@ class HomeController extends Controller
             'courses' => 'required',
             'facebook' => 'required',
             'line' => 'required',
-            'picFile' => 'required',
-            'customFile' => 'required',
-            'portfolio_file' => 'required',
+            // 'picFile' => 'required',
+            // 'customFile' => 'required',
+            // 'portfolio_file' => 'required',
 
         ]);
 
@@ -74,8 +97,11 @@ class HomeController extends Controller
             $filename = $request->file('picFile')->getClientOriginalName();
             $filename = explode(".", $filename);
             $namepicFile = "P_" . $filename[0] . "_" . time() . rand(1, 100) . '.' . $request->picFile->extension();
-            $request->picFile->storeAs('public/picFile', $namepicFile);
+            // $request->picFile->storeAs('public/picFile', $namepicFile);
+            $namepicFile = $request->picFile->storeAs('picFile', $namepicFile, 'public');
 
+        } else {
+            $namepicFile = null;
         }
         if ($request->hasfile('customFile')) {
 
@@ -84,6 +110,8 @@ class HomeController extends Controller
             $namecustomFile = "C_" . $filename[0] . "_" . time() . rand(1, 100) . '.' . $request->customFile->extension();
             $request->customFile->storeAs('public/customFile', $namecustomFile);
 
+        } else {
+            $namecustomFile = null;
         }
         if ($request->hasfile('portfolio_file')) {
 
@@ -92,6 +120,8 @@ class HomeController extends Controller
             $nameportfolio_file = "P_" . $filename[0] . "_" . time() . rand(1, 100) . '.' . $request->portfolio_file->extension();
             $request->portfolio_file->storeAs('public/portfolio_file', $nameportfolio_file);
 
+        } else {
+            $nameportfolio_file = null;
         }
         $nameguidance_teacher = null;
         if ($request->hasfile('guidance_teacher')) {
@@ -101,6 +131,8 @@ class HomeController extends Controller
             $nameguidance_teacher = "GT_" . $filename[0] . "_" . time() . rand(1, 100) . '.' . $request->guidance_teacher->extension();
             $request->guidance_teacher->storeAs('public/guidance_teacher', $nameguidance_teacher);
 
+        } else {
+            $nameguidance_teacher = null;
         }
 
         $id = IdGenerator::generate(['table' => 'regists', 'length' => 7, 'prefix' => date('ym'), 'reset_on_prefix_change' => true]);
@@ -130,7 +162,7 @@ class HomeController extends Controller
         $regists = Regist::where('iduser', '=', Auth::user()->id)
             ->join('projects', 'projects.id', '=', 'regists.project')
             ->join('courses', 'courses.id', '=', 'regists.course')
-            ->select('regists.*', 'projects.Projectname as Projectname', 'courses.Cosename as Cosename')
+            ->select('regists.*', 'projects.Projectname as Projectname', 'courses.Cosename as Cosename', 'projects.teacher as teacher')
             ->orderByDesc('id')
             ->get();
         return view('frontend.registdetail', compact('regists'));
@@ -145,7 +177,7 @@ class HomeController extends Controller
             ->select('regists.*', 'projects.Projectname as Projectname', 'courses.Cosename as Cosename')
             ->orderByDesc('regists.id')
             ->first();
-            
+
         return view('frontend.viewregistsdetail', compact('regists'));
     }
     public function downloadFile($path, $filename)
@@ -190,5 +222,81 @@ class HomeController extends Controller
         $projects = project::where('projects.id', '=', $request->id)->first();
 
         return response($projects->teacher);
+    }
+    public function uploadpicFile(Request $request)
+    {
+        if ($request->hasfile('picFile')) {
+
+            $filename = $request->file('picFile')->getClientOriginalName();
+            $filename = explode(".", $filename);
+            $namepicFile = "P_" . $filename[0] . "_" . time() . rand(1, 100) . '.' . $request->picFile->extension();
+            // $request->picFile->storeAs('public/picFile', $namepicFile);
+            $namepicFile = $request->picFile->storeAs('picFile', $namepicFile, 'public');
+            Regist::where('id', $request->idreg)
+                ->update(
+                    [
+                        'stdpic' => $namepicFile,
+                    ]
+                );
+            return redirect()->back()->with('status', 'Successfully');
+
+        }
+        return redirect()->back()->with('error', 'Updated error');
+
+    }
+    public function uploadcustomFile(Request $request)
+    {
+        if ($request->hasfile('customFile')) {
+
+            $filename = $request->file('customFile')->getClientOriginalName();
+            $filename = explode(".", $filename);
+            $namecustomFile = "C_" . $filename[0] . "_" . time() . rand(1, 100) . '.' . $request->customFile->extension();
+            $request->customFile->storeAs('public/customFile', $namecustomFile);
+            Regist::where('id', $request->idreg)
+                ->update(
+                    [
+                        'school_record' => $namecustomFile,
+                    ]
+                );
+            return redirect()->back()->with('status', 'Successfully');
+        }
+        return redirect()->back()->with('error', 'Updated error');
+
+    }
+    public function uploadportfolio_file(Request $request)
+    {
+        if ($request->hasfile('portfolio_file')) {
+
+            $filename = $request->file('portfolio_file')->getClientOriginalName();
+            $filename = explode(".", $filename);
+            $nameportfolio_file = "P_" . $filename[0] . "_" . time() . rand(1, 100) . '.' . $request->portfolio_file->extension();
+            $request->portfolio_file->storeAs('public/portfolio_file', $nameportfolio_file);
+            Regist::where('id', $request->idreg)
+                ->update(
+                    [
+                        'portfolio_file' => $nameportfolio_file,
+                    ]
+                );
+            return redirect()->back()->with('status', 'Successfully');
+        }
+        return redirect()->back()->with('error', 'Updated error');
+    }
+    public function uploadguidance_teacher(Request $request)
+    {
+        if ($request->hasfile('guidance_teacher')) {
+
+            $filename = $request->file('guidance_teacher')->getClientOriginalName();
+            $filename = explode(".", $filename);
+            $nameguidance_teacher = "GT_" . $filename[0] . "_" . time() . rand(1, 100) . '.' . $request->guidance_teacher->extension();
+            $request->guidance_teacher->storeAs('public/guidance_teacher', $nameguidance_teacher);
+            Regist::where('id', $request->idreg)
+                ->update(
+                    [
+                        'guidance_teacher' => $nameguidance_teacher,
+                    ]
+                );
+            return redirect()->back()->with('status', 'Successfully');
+        }
+        return redirect()->back()->with('error', 'Updated error');
     }
 }

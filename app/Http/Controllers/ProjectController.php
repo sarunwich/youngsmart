@@ -68,10 +68,27 @@ class ProjectController extends Controller
      * @param  \App\Models\Project  $project
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Project $project)
-    {
-        //
+    public function update(Request $request, $id)
+{
+    $project = Project::find($id);
+    $project->Projectname = $request->input('Projectname');
+    $project->Projectdetail = $request->input('Projectdetail');
+    $project->tcas = $request->input('tcas');
+    $project->year = $request->input('year');
+
+    if ($request->hasFile('Projectfile')) {
+        $filename = $request->file('Projectfile')->getClientOriginalName();
+        $filename = explode(".", $filename);
+        $name = "P_" . $filename[0] . "_" . time() . rand(1, 100) . '.' . $request->Projectfile->extension();
+        $request->Projectfile->storeAs('public/Projectfile', $name);
+        $project->Projectfile = $filename;
     }
+
+    $project->save();
+
+    // return redirect()->route('projects.index')->with('success', 'Project updated successfully');
+    return redirect()->back()->with('success', 'Project updated successfully');
+}
 
     /**
      * Remove the specified resource from storage.
@@ -79,8 +96,14 @@ class ProjectController extends Controller
      * @param  \App\Models\Project  $project
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Project $project)
+    public function destroy($id)
     {
         //
+        $course = Project::findOrFail($id);
+        $course->status = '0';
+        $course->delstatus = '1';
+        $course->save();
+        return redirect()->back()->with('success', 'Project deleted successfully.');
+
     }
 }

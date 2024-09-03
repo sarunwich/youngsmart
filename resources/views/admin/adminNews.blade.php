@@ -20,59 +20,63 @@
     <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
 @endpush
 @section('content')
-<div class="d-sm-flex align-items-center justify-content-between mb-4">
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-12">
-                <div class="card">
-                    <div class="card-header">{{ __('จัดการข้อมูลข่าวประชาสัมพันธ์') }}
-                        <a href="#" onclick="addnew()" class="btn btn-light text-success pull-right"><samp><i
-                                    class="fa fa-plus-circle" aria-hidden="true"></i></samp></a>
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header">{{ __('จัดการข้อมูลข่าวประชาสัมพันธ์') }}
+                            <a href="#" onclick="addnew()" class="btn btn-light text-success pull-right"><samp><i
+                                        class="fa fa-plus-circle" aria-hidden="true"></i></samp></a>
+                        </div>
                     </div>
-                </div>
 
-                <div class="card-body">
-                    <span id="addnew" class="customhidden">
-                        <div class="col-md-12">
-                            <div class="card">
-                                <div class="card-header">{{ __('ข่าวประชาสัมพันธ์') }}
-                                </div>
-                                <div class="card-body">
+                    <div class="card-body">
+                        <span id="addnew" class="customhidden">
+                            <div class="col-md-12">
+                                <div class="card">
+                                    <div class="card-header">{{ __('ข่าวประชาสัมพันธ์') }}
+                                    </div>
+                                    <div class="card-body">
 
-                                    <form id="addnewsss" action="{{ route('addnew.create') }}" method="POST"
-                                        enctype="multipart/form-data">
-                                        @csrf
+                                        <form id="addnewsss" action="{{ route('addnew.create') }}" method="POST"
+                                            enctype="multipart/form-data">
+                                            @csrf
 
-                                        <div class="form-group">
-                                            <label for="formGroupExampleInput">หัวข้อข่าว/ประชาสัมพันธ์</label>
-                                            <input type="text" class="form-control" id="pr_title" required
-                                                name="pr_title" placeholder="หัวข้อข่าว/ประชาสัมพันธ์">
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="formGroupExampleInput2">รายละเอียดของข่าว/ประชาสัมพันธ์</label>
-
-                                            <textarea class="form-control" id="pr_detail" name="pr_detail" placeholder="รายละเอียดของข่าว/ประชาสัมพันธ์"
-                                                rows="3"></textarea>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="formGroupExampleInput2">เอกสารแนบ(ถ้ามี)</label>
-                                            <div class="input-group">
-                                                <input type="file" autofocus name="pr_file"
-                                                    placeholder="Enter update_file" class="form-control" />
-                                                <span class="input-group-text" id="basic-addon2"><i
-                                                        class="bi bi-filetype-pdf"></i></span>
+                                            <div class="form-group">
+                                                <label for="formGroupExampleInput">หัวข้อข่าว/ประชาสัมพันธ์</label>
+                                                <input type="text" class="form-control" id="pr_title" required
+                                                    name="pr_title" placeholder="หัวข้อข่าว/ประชาสัมพันธ์">
                                             </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <button type="submit" onclick="showWaitAlert()"
-                                                class="btn btn-primary">บันทึก</button>
-                                        </div>
-                                    </form>
+                                            <div class="form-group">
+                                                <label for="formGroupExampleInput2">รายละเอียดของข่าว/ประชาสัมพันธ์</label>
+
+                                                <textarea class="form-control" id="pr_detail" name="pr_detail" placeholder="รายละเอียดของข่าว/ประชาสัมพันธ์"
+                                                    rows="3"></textarea>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="formGroupExampleInput2">เอกสารแนบ(ถ้ามี)</label>
+                                                <div class="input-group">
+                                                    <input type="file" autofocus name="pr_file"
+                                                        placeholder="Enter update_file" class="form-control" />
+                                                    <span class="input-group-text" id="basic-addon2"><i
+                                                            class="bi bi-filetype-pdf"></i></span>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <button type="submit" onclick="showWaitAlert()"
+                                                    class="btn btn-primary">บันทึก</button>
+                                            </div>
+                                        </form>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </span>
-                    <table id="example" class="table table-striped" style="width:100%">
+                        </span>
+
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <table id="example" class="table table-striped table-responsive" >
                         <thead>
                             <tr>
                                 <th>ลำดับที่</th>
@@ -89,8 +93,13 @@
                                 <tr>
                                     <td>{{ $key + 1 }}</td>
                                     <td>{{ $new->pr_title }}</td>
-                                    <td>
-                                        <pre>{!! $new->pr_detail !!}</pre>
+                                    <td class="w-25">
+                                        <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                                        data-bs-target="#detailModal{{ $key }}">
+                                                        View Details
+                                                    </button>
+                                       
+                                        {{-- <pre>{{ $new->pr_detail }}</pre> --}}
                                     </td>
                                     <td>{{ $new->pr_date }}</td>
                                     <td>
@@ -126,24 +135,47 @@
                                         </div>
                                     </td>
                                 </tr>
+                                <!-- Modal detail-->
+                                <div class="modal fade" id="detailModal{{ $key }}" tabindex="-1"
+                                aria-labelledby="detailModalLabel{{ $key }}" aria-hidden="true">
+                                <div class="modal-dialog modal-xl">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title"
+                                                id="detailModalLabel{{ $key }}">รายละเอียด
+                                            </h5>
+                                            <button type="button" class="btn-close"
+                                                data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div id="summernote{{ $key }}"
+                                                class="summernote-content"> {!!$new->pr_detail !!}</div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary"
+                                                data-bs-dismiss="modal">Close</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                             @endforeach
                         </tbody>
                     </table>
                 </div>
+
             </div>
         </div>
     </div>
-</div>
 @endsection
 @push('scripts')
-<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
-<script type="text/javascript">
-    $(document).ready(function () {
-        $('#pr_detail').summernote({
-            height: 450,
+    <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('#pr_detail').summernote({
+                height: 450,
+            });
         });
-    });
-</script>
+    </script>
     <script>
         function addnew() {
             // document.getElementById("addnew").style.display = 'block';

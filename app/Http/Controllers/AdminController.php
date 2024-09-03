@@ -7,6 +7,7 @@ use App\Models\Course;
 use App\Models\Project;
 use App\Models\Regist;
 use App\Models\User;
+use App\Models\Responsible;
 use Haruncpi\LaravelIdGenerator\IdGenerator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -18,6 +19,37 @@ use App\Mail\SendMail;
 class AdminController extends Controller
 {
     //
+    public function config()
+    {
+        $users= User::where('type','=',2)->get();
+        $courses = Course::where('status', '=', 1)->get();
+        return view('admin.config', compact('users','courses'));
+
+    }
+    public function configdb(Request $request)
+    {
+       
+        $validatedData = $request->validate([
+            'couse_id' => 'required',
+            'user_id' => 'required'
+        ]);
+        //  dd($request);
+        $id = IdGenerator::generate(['table' => 'responsibles', 'length' => 7, 'prefix' => date('ym'), 'reset_on_prefix_change' => true]);
+        $data = [
+            'id' => $id,
+            'course_id' => $request->couse_id,
+            'user_id' => $request->user_id,
+            'created_at' => date('Y-m-d H:i:s'),
+            'updated_at' => date('Y-m-d H:i:s'),
+
+            // Add more columns and values as needed
+        ];
+
+        $status_update = Responsible::insert($data);
+
+       return redirect()->back()->with('status', 'Insert Successfully');
+
+    }
     public function downloadFile($path, $filename)
     {
         $filepath = public_path('storage/' . $path . '/' . $filename);
@@ -89,7 +121,8 @@ class AdminController extends Controller
     }
     public function cose()
     {
-        $coses = Course::all();
+        $coses=Course::where('delstatus','<>',1)
+        ->get();
         return view('admin.admincouse', compact('coses'));
     }
     public function addcose(Request $request)
@@ -118,6 +151,8 @@ class AdminController extends Controller
                 'datestart' => $request->datestart,
                 'dateend' => $request->dateend,
                 'status' => 1,
+                'created_at' => date('Y-m-d H:i:s'),
+                'updated_at' => date('Y-m-d H:i:s'),
             ]
         );
         return redirect()->back();
@@ -209,6 +244,17 @@ class AdminController extends Controller
                 ]
             );
         return redirect()->back()->with('status', 'Updated Successfully');
+    }
+
+    public function CouseUpstatus(Request $request)
+    {
+        Course::where('id', $request->id)
+        ->update(
+            [
+                'status' => $request->status,
+            ]
+        );
+        return redirect()->back()->with('success', 'Updated Successfully');
     }
 
     public function viewregistsdetail(Request $request)

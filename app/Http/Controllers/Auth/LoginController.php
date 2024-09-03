@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Http\Request;
 
 class LoginController extends Controller
 {
@@ -27,16 +28,42 @@ class LoginController extends Controller
      *
      * @var string
      */
-    // protected $redirectTo = RouteServiceProvider::HOME;
-    protected function redirectTo()
-    {
-      if (Auth::user()->user_type == 'Administrator')
-      {
-        return '/admin';  // admin dashboard path
-      } else {
-        return '/user/home';  // member dashboard path
-      }
+     protected $redirectTo = RouteServiceProvider::HOME;
+     public function login(Request $request)
+    {   
+        $input = $request->all();
+     
+        $this->validate($request, [
+            'email' => 'required|email',
+            'password' => 'required',
+        ]);
+     
+        if(auth()->attempt(array('email' => $input['email'], 'password' => $input['password'])))
+        {
+            if (auth()->user()->type == 'admin') {
+                return redirect()->route('dashboard');
+            }else if (auth()->user()->type == 'manager') {
+                return redirect()->route('manager.home');
+            }else{
+                return redirect()->route('user.home');
+            }
+        }else{
+            return redirect()->route('login')
+                ->with('error','Email-Address And Password Are Wrong.');
+        }
+          
     }
+    // protected function redirectTo()
+    // {
+    //   if (Auth::user()->user_type == 'Administrator')
+    //   {
+    //     return '/admin';  // admin dashboard path
+    //   }else if(Auth::user()->user_type == 'Manager'){
+    //     return '/manager'; 
+    //   } else {
+    //     return '/user/home';  // member dashboard path
+    //   }
+    // }
     /**
      * Create a new controller instance.
      *

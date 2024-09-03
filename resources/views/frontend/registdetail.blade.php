@@ -15,38 +15,116 @@
                 <td>เลขที่</td>
                 <td>โครงการ</td>
                 <td>หลักสูตร</td>
-                <td>เอกสารชำระเงิน</td>
+                <td>เอกสาร</td>
                 <td>สถานะ</td>
             </thead>
             <tbody>
                 @foreach ($regists as $key => $regist)
                     <tr>
                         <td>{{ $key + 1 }}</td>
-                        <td>{{ $regist->id }}</td>
+                        <td>{{ $regist->id }}
+                            <button class='btn btn-outline-info viewregists' data-id='{{ $regist->id ?? '' }}'
+                                title="ดูรายละเอียด"><samp><i class="bi bi-eye-fill"></i>
+                                </samp></button>
+                        </td>
                         <td>{{ $regist->Projectname }}</td>
                         <td> {{ $regist->Cosename }}</td>
                         <td>
-                            @if ($regist->std_status == null || $regist->std_status == 2)
-                                <form action="{{ route('user.uppayment') }}" method="POST" enctype="multipart/form-data">
-                                    @csrf
-                                    <div class="input-group">
-                                        <input name="idreg" id="idreg" type="hidden" value="{{ $regist->id }}">
-                                        <input type="file" required name="payment" onchange="this.form.submit()"
-                                            placeholder="กรุณาเลือกไฟล์" class="form-control" />
-                                        <span class="input-group-text" id="basic-addon2"><i
-                                                class="bi bi-cash-stack"></i></span>
-                                    </div>
+                            <ul>
+                                <li>เอกสารการชำระเงิน<br>
+                                  
+                                    @if ($regist->std_status == null || $regist->std_status == 2)
+                                        <form id="reg{{ $regist->id }}" action="{{ route('user.uppayment') }}"
+                                            method="POST" enctype="multipart/form-data">
+                                            @csrf
+                                            <div class="input-group">
+                                                <input name="idreg" id="idreg" type="hidden"
+                                                    value="{{ $regist->id }}">
+                                                <input type="file" required name="payment" onchange="this.form.submit()"
+                                                    placeholder="กรุณาเลือกไฟล์" class="form-control" />
+                                                <span class="input-group-text" id="basic-addon2"><i
+                                                        class="bi bi-cash-stack"></i></span>
+                                            </div>
 
-                                </form>
-                            @else
-                                <a class="btn btn-outline-success"
-                                    href="{{ url('viewfile/payment/' . $regist->payment) }}"><i
-                                        class="bi bi-cash-stack"></i></a>
-                                {{ $regist->dateup_p }}
-                            @endif
+                                        </form>
+                                    @else
+                                        <a class="btn btn-outline-success"
+                                            href="{{ url('viewfile/payment/' . $regist->payment) }}"><i
+                                                class="bi bi-cash-stack"></i></a>
+                                        {{ $regist->dateup_p }}
+                                    @endif
+                                </li>
+
+                                @if ($regist->stdpic == null)
+                                    <li>รูปถ่าย
+                                       
+                                        <form id="formpicfile{{ $regist->id }}" action="{{ route('uploadpicFile') }}" method="POST" enctype="multipart/form-data">
+                                            @csrf
+                                            <input name="idreg" id="idreg" type="hidden"
+                                                    value="{{ $regist->id }}">
+                                                    <div class="input-group">
+                                                        <input type="file" onchange="this.form.submit()"  accept="image/*" name="picFile"
+                                                            placeholder="กรุณาเลือกไฟล์" class="form-control" />
+                                                        <span class="input-group-text" id="basic-addon2"><i
+                                                                class="bi bi-file-earmark-image"></i></span>
+                                                    </div>
+                                        </form>
+
+                                    </li>
+                                @endif
+                                @if ($regist->school_record == null)
+                                    <li>ผลการเรียน
+                                        <form id="formcustomFile{{ $regist->id }}" action="{{ route('uploadcustomFile') }}" method="POST" enctype="multipart/form-data">
+                                            @csrf
+                                            <input name="idreg" id="idreg" type="hidden"
+                                                    value="{{ $regist->id }}">
+                                                    <div class="input-group">
+                                                        <input type="file" onchange="this.form.submit()" name="customFile" id="customFile"
+                                                            placeholder="กรุณาเลือกไฟล์" class="form-control" accept=".pdf">
+                                                        <span class="input-group-text" id="basic-addon2"><i
+                                                                class="bi bi-filetype-pdf"></i></span>
+            
+                                                    </div>
+                                        </form>
+                                    </li>
+                                @endif
+                                @if ($regist->portfolio_file == null)
+                                    <li>ไฟล์ผลงาน
+                                        <form id="formportfolio_file{{ $regist->id }}" action="{{ route('uploadportfolio_file') }}" method="POST" enctype="multipart/form-data">
+                                            @csrf
+                                            <input name="idreg" id="idreg" type="hidden"
+                                                    value="{{ $regist->id }}">
+                                                    <div class="input-group">
+                                                        <input type="file" placeholder="กรุณาเลือกไฟล์" class="form-control"
+                                                            name="portfolio_file" onchange="this.form.submit()" id="portfolio_file" accept=".pdf">
+                                                        <span class="input-group-text" id="basic-addon2"><i
+                                                                class="bi bi-filetype-pdf"></i></span>
+            
+                                                    </div>
+                                        </form>
+                                    </li>
+                                @endif
+                                @if ($regist->guidance_teacher == null && $regist->teacher ==1)
+                                    <li>เอกสารรับรองครูแนะแนว
+                                        <form id="formguidance_teacher{{ $regist->id }}" action="{{ route('uploadguidance_teacher') }}" method="POST" enctype="multipart/form-data">
+                                            @csrf
+                                            <input name="idreg" id="idreg" type="hidden"
+                                                    value="{{ $regist->id }}">
+                                                    <div class="input-group">
+                                                        <input type="file" placeholder="กรุณาเลือกไฟล์" class="form-control"
+                                                            name="guidance_teacher" onchange="this.form.submit()"  id="guidance_teacher" accept=".pdf">
+                                                        <span class="input-group-text" id="basic-addon2"><i
+                                                                class="bi bi-filetype-pdf"></i></span>
+            
+                                                    </div>
+                                        </form>
+                                    </li>
+                                @endif
+                            </ul>
 
                         </td>
-                        <td>{{ $regist->std_status }}
+                        <td>
+                            {{-- {{ $regist->std_status }} --}}
                             @if ($regist->std_status == null)
                                 รอเอกสารชำระเงิน
                             @elseif($regist->std_status == 1)
