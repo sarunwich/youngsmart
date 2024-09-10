@@ -9,8 +9,19 @@ class Responsible extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'couse_id',
+        'course_id',
         'user_id',
         
     ];
+     // Define the relationship to the user
+     public function user()
+     {
+         return $this->belongsTo(User::class);
+     }
+ 
+     // Define the relationship to the course
+     public function course()
+    {
+        return $this->belongsTo(Course::class);
+    }
 }

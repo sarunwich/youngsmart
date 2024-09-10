@@ -67,7 +67,7 @@ class MyController extends Controller
             }
         
             // Retrieve paginated data
-            $data = $regists->paginate($perPage);
+            $data = $regists->get();
         return view('registdata', compact('data', 'search'));
     }
 }

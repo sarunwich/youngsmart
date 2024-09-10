@@ -14,4 +14,20 @@ class Course extends Model
         'datestart',
         'dateend'
     ];
+
+    // Define the relationship to the users
+    public function responsibles()
+    {
+        return $this->hasMany(Responsible::class);
+    }
+
+    // Define the relationship to directly access users
+    public function users()
+    {
+        return $this->belongsToMany(User::class, 'responsibles');
+    }
+    public function regists()
+    {
+        return $this->belongsToMany(Regist::class, 'course_regist', 'course_id', 'regist_id');
+    }
 }

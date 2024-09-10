@@ -10,6 +10,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\AnnouncementController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\TeacherResponsibleController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -104,7 +105,11 @@ Route::middleware(['auth', 'user-access:admin'])->group(function () {
 
     Route::get('admin/config',[AdminController::class, 'config'])->name('admin.config');
     Route::post('admin/configdb', [AdminController::class, 'configdb'])->name('admin.configdb');
+    Route::delete('/responsibles/{id}', [AdminController::class, 'deleteResponsible'])->name('responsibles.destroy');
+    Route::delete('/registdestroy/{id}', [AdminController::class, 'deleteRegist'])->name('regist.destroy');
 
+    Route::get('admin/adduser_teacher',[AdminController::class, 'adduser_teacher'])->name('admin.adduser_teacher');
+   
    
     
 });
@@ -117,6 +122,9 @@ All Admin Routes List
 Route::middleware(['auth', 'user-access:manager'])->group(function () {
   
     Route::get('/manager/home', [HomeController::class, 'managerHome'])->name('manager.home');
+    
+    Route::resource('TeacherResponsible', TeacherResponsibleController::class);
+
 });
 
 

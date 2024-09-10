@@ -56,38 +56,58 @@
     <div class="row">
         <div class="col-6 mb-4">
             <label class="form-label">รูปถ่าย</label>
-           
-            <div>
-                <img alt="Product Image" class="w-100" src="{{ asset('storage/' . $regists->stdpic) }}" />
-            </div>
+            @if ($regists->stdpic)
+                <div>
+                    <img alt="Product Image" class="w-100" src="{{ asset('storage/' . $regists->stdpic) }}" />
+                </div>
+            @else
+                N/A
+            @endif
         </div>
         <div class="col-6 mb-4">
             <label class="form-label">ผลการเรียน</label>
-            <iframe src="{{ asset('storage/customFile/' . $regists->school_record) }}" style="width:100%; height:90%;" frameborder="0"></iframe>
+            @if ($regists->school_record)
+                <iframe src="{{ asset('storage/customFile/' . $regists->school_record) }}"
+                    style="width:100%; height:90%;" frameborder="0"></iframe>
 
-            <div>
-                <a class="btn btn-outline-success" href="{{ url('get/customFile/' . $regists->school_record) }}"> {{ $regists->school_record }}</a>
-            </div>
+                <div>
+                    <a class="btn btn-outline-success" href="{{ url('get/customFile/' . $regists->school_record) }}">
+                        {{ $regists->school_record }}</a>
+                </div>
+            @else
+                N/A
+            @endif
         </div>
     </div>
     <div class="row">
         <div class="col-6 mb-4">
             <label class="form-label">ไฟล์ผลงาน</label>
-            <iframe src="{{ asset('storage/portfolio_file/' . $regists->portfolio_file) }}" style="width:100%; height:600px;" frameborder="0"></iframe>
-            <div>
-                <a class="btn btn-outline-success" href="{{ url('get/portfolio_file/' . $regists->portfolio_file) }}">
-                    {{ $regists->portfolio_file }}</a>
-            </div>
+            @if ($regists->portfolio_file)
+                <iframe src="{{ asset('storage/portfolio_file/' . $regists->portfolio_file) }}"
+                    style="width:100%; height:600px;" frameborder="0"></iframe>
+                <div>
+                    <a class="btn btn-outline-success"
+                        href="{{ url('get/portfolio_file/' . $regists->portfolio_file) }}">
+                        {{ $regists->portfolio_file }}</a>
+                </div>
+            @else
+                N/A
+            @endif
         </div>
         @if (isset($regists->guidance_teacher))
             <div class="col-6 mb-4">
                 <label class="form-label">เอกสารรับรองครูแนะแนว</label>
-                <iframe src="{{ asset('storage/guidance_teacher/' . $regists->guidance_teacher) }}" style="width:100%; height:600px;" frameborder="0"></iframe>
-                <div>
-                    <a class="btn btn-outline-success"
-                        href="{{ url('get/guidance_teacher/' . $regists->guidance_teacher) }}">{{$regists->guidance_teacher}}</a>
+                @if ($regists->guidance_teacher)
+                    <iframe src="{{ asset('storage/guidance_teacher/' . $regists->guidance_teacher) }}"
+                        style="width:100%; height:600px;" frameborder="0"></iframe>
+                    <div>
+                        <a class="btn btn-outline-success"
+                            href="{{ url('get/guidance_teacher/' . $regists->guidance_teacher) }}">{{ $regists->guidance_teacher }}</a>
 
-                </div>
+                    </div>
+                @else
+                    N/A
+                @endif
 
             </div>
         @endif

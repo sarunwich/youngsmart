@@ -1,5 +1,41 @@
 @extends('layouts.frontendlayout')
+@push('style')
+     <style>
+        .bd-callout {
+            padding: 1.25rem;
+            margin-top: 1.25rem;
+            margin-bottom: 1.25rem;
+            border: 1px solid #eee;
+            border-left-width: 0.25rem;
+            border-radius: 0.25rem;
+        }
 
+        .bd-callout-info {
+            border-left-color: #5bc0de;
+            background-color: #d9edf7;
+        }
+
+        .bd-callout-warning {
+            border-left-color: #f0ad4e;
+            background-color: #fcf8e3;
+        }
+
+        .bd-callout-danger {
+            border-left-color: #d9534f;
+            background-color: #f2dede;
+        }
+
+        .bd-callout-primary {
+            border-left-color: #337ab7;
+            background-color: #d9edf7;
+        }
+
+        .bd-callout-success {
+            border-left-color: #5cb85c;
+            background-color: #dff0d8;
+        }
+    </style>
+    @endpush
 @section('content')
     {{-- <div class="d-sm-flex align-items-center justify-content-between mb-4"> --}}
     <div class="container-fluid">
@@ -126,16 +162,26 @@
                         <td>
                             {{-- {{ $regist->std_status }} --}}
                             @if ($regist->std_status == null)
+                            <div class="bd-callout bd-callout-warning">
                                 รอเอกสารชำระเงิน
-                            @elseif($regist->std_status == 1)
+                            </div>
+                        @elseif($regist->std_status == 1)
+                            <div class="bd-callout bd-callout-info">
                                 ชำระเงินรอตรวจสอบ
-                            @elseif($regist->std_status == 2)
+                            </div>
+                        @elseif($regist->std_status == 2)
+                            <div class="bd-callout bd-callout-danger">
                                 ยื่นเอกสารชำระเงินอีกครั้ง
-                            @elseif($regist->std_status == 3)
+                            </div>
+                        @elseif($regist->std_status == 3)
+                            <div class="bd-callout bd-callout-primary">
                                 ชำระเงินเรียบร้อยรอผลการสมัคร
-                            @elseif($regist->std_status == 4)
-                                ผ่าน
-                            @endif
+                            </div>
+                        @elseif($regist->std_status == 4)
+                            <div class="bd-callout bd-callout-success">
+                                ผ่านการคัดเลือก
+                            </div>
+                        @endif
 
                             <button class='btn btn-outline-info viewregists' data-id='{{ $regist->id ?? '' }}'
                                 title="ดูรายละเอียด"><samp><i class="bi bi-eye-fill"></i>

@@ -4,41 +4,6 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.5/css/dataTables.bootstrap5.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.bootstrap5.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.5.1/css/responsive.bootstrap5.min.css">
-    <style>
-        .bd-callout {
-            padding: 0.05rem;
-            margin-top: 0.05rem;
-            margin-bottom: 0.05rem;
-            border: 1px solid #eee;
-            border-left-width: 0.25rem;
-            border-radius: 0.25rem;
-        }
-
-        .bd-callout-info {
-            border-left-color: #5bc0de;
-            background-color: #d9edf7;
-        }
-
-        .bd-callout-warning {
-            border-left-color: #f0ad4e;
-            background-color: #fcf8e3;
-        }
-
-        .bd-callout-danger {
-            border-left-color: #d9534f;
-            background-color: #f2dede;
-        }
-
-        .bd-callout-primary {
-            border-left-color: #337ab7;
-            background-color: #d9edf7;
-        }
-
-        .bd-callout-success {
-            border-left-color: #5cb85c;
-            background-color: #dff0d8;
-        }
-    </style>
 @endpush
 @section('content')
     {{-- <div class="d-sm-flex align-items-center justify-content-between mb-4"> --}}
@@ -69,12 +34,10 @@
                     <td>สถานะ</td>
                 </thead>
                 <tbody>
-                    @php
-                        $total = $regists->count();
-                    @endphp
+                  
                     @foreach ($regists as $key => $regist)
                         <tr>
-                            <td>{{ $total - $key }}</td>
+                            <td>{{ $key + 1 }}</td>
                             <td>{{ $regist->id }}
                                 <button class='btn btn-outline-info viewregists' data-id='{{ $regist->id ?? '' }}'
                                     title="ดูรายละเอียด"><samp><i class="bi bi-eye-fill"></i>
@@ -105,25 +68,15 @@
                             <td>
                                 {{-- {{ $regist->std_status }} --}}
                                 @if ($regist->std_status == null)
-                                    <div class="bd-callout bd-callout-warning">
-                                        รอเอกสารชำระเงิน
-                                    </div>
+                                    รอเอกสารชำระเงิน
                                 @elseif($regist->std_status == 1)
-                                    <div class="bd-callout bd-callout-info">
-                                        ชำระเงินรอตรวจสอบ
-                                    </div>
+                                    ชำระเงินรอตรวจสอบ
                                 @elseif($regist->std_status == 2)
-                                    <div class="bd-callout bd-callout-danger">
-                                        ยื่นเอกสารชำระเงินอีกครั้ง
-                                    </div>
+                                    ยื่นเอกสารชำระเงินอีกครั้ง
                                 @elseif($regist->std_status == 3)
-                                    <div class="bd-callout bd-callout-primary">
-                                        ชำระเงินเรียบร้อยรอผลการสมัคร
-                                    </div>
+                                    ชำระเงินเรียบร้อยรอผลการสมัคร
                                 @elseif($regist->std_status == 4)
-                                    <div class="bd-callout bd-callout-success">
-                                        ผ่านการคัดเลือก
-                                    </div>
+                                    ผ่าน
                                 @endif
                                 <form action="{{ route('admin.upstatus') }}" method="POST" enctype="multipart/form-data">
                                     @csrf
@@ -133,15 +86,8 @@
                                         <option selected>เลือกสถานะ</option>
                                         <option value="2">ยื่นเอกสารชำระเงินอีกครั้ง</option>
                                         <option value="3">ชำระเงินเรียบร้อย</option>
-                                        <option value="4">ผ่านการคัดเลือก</option>
+                                        <option value="4">ผ่าน</option>
                                     </select>
-                                </form>
-                                <form action="{{ route('regist.destroy', $regist->id) }}"
-                                    class="d-inline delete-form" method="POST">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="button"
-                                        class="btn btn-sm btn-danger delete-button">Delete</button>
                                 </form>
                             </td>
                         </tr>
@@ -223,16 +169,7 @@
                 $(".alert").alert('close');
             }, 5000);
             // });
-            $('#example').DataTable({
-                "columnDefs": [{
-                    "searchable": false,
-                    "orderable": false,
-                    "targets": 0
-                }],
-                "order": [
-                    [1, 'desc']
-                ]
-            });
+            $('#example').DataTable({});
             $('#example').on('click', '.viewregists', function() {
                 var id = $(this).attr('data-id');
 
@@ -274,33 +211,6 @@
                         // Set the image src and show the modal
                         paymentImage.src = paymentUrl;
                         paymentModal.show();
-                    });
-                });
-            });
-        });
-    </script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const deleteForms = document.querySelectorAll('.delete-form');
-    
-            deleteForms.forEach(form => {
-                const deleteButton = form.querySelector('.delete-button');
-    
-                deleteButton.addEventListener('click', function(event) {
-                    event.preventDefault();
-    
-                    Swal.fire({
-                        title: 'Are you sure?',
-                        text: "You won't be able to revert this!",
-                        icon: 'warning',
-                        showCancelButton: true,
-                        confirmButtonColor: '#3085d6',
-                        cancelButtonColor: '#d33',
-                        confirmButtonText: 'Yes, delete it!'
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            form.submit();
-                        }
                     });
                 });
             });

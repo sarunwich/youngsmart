@@ -50,7 +50,12 @@
                 </div>
 
             </a>
-            @include('include.BackendSidebar')
+            @if (Auth::user()->type == 'admin')
+                @include('include.BackendSidebar')
+            @else
+            @include('include.TeacherResponsible')
+            @endif
+            
         </ul>
         <!-- End of Sidebar -->
 

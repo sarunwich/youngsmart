@@ -3,35 +3,40 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Mail\SendMail;
 use App\Models\Course;
 use App\Models\Project;
 use App\Models\Regist;
-use App\Models\User;
 use App\Models\Responsible;
+use App\Models\User;
 use Haruncpi\LaravelIdGenerator\IdGenerator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Mail;
-use App\Mail\SendMail;
+use Illuminate\Support\Facades\Response;
 
 class AdminController extends Controller
 {
     //
     public function config()
     {
-        $users= User::where('type','=',2)->get();
+        $users = User::where('type', '=', 2)->get();
         $courses = Course::where('status', '=', 1)->get();
-        return view('admin.config', compact('users','courses'));
+        // $users_courses = User::where('type', 2)->with('responsible','courses')->get();
+        $users_courses = User::where('type', 2)->with('responsibles.course', 'courses')
+            ->has('responsibles')
+            ->orderBy('id', 'asc')
+            ->get();
+        return view('admin.config', compact('users', 'courses', 'users_courses'));
 
     }
     public function configdb(Request $request)
     {
-       
+
         $validatedData = $request->validate([
             'couse_id' => 'required',
-            'user_id' => 'required'
+            'user_id' => 'required',
         ]);
         //  dd($request);
         $id = IdGenerator::generate(['table' => 'responsibles', 'length' => 7, 'prefix' => date('ym'), 'reset_on_prefix_change' => true]);
@@ -47,7 +52,7 @@ class AdminController extends Controller
 
         $status_update = Responsible::insert($data);
 
-       return redirect()->back()->with('status', 'Insert Successfully');
+        return redirect()->back()->with('status', 'Insert Successfully');
 
     }
     public function downloadFile($path, $filename)
@@ -121,8 +126,8 @@ class AdminController extends Controller
     }
     public function cose()
     {
-        $coses=Course::where('delstatus','<>',1)
-        ->get();
+        $coses = Course::where('delstatus', '<>', 1)
+            ->get();
         return view('admin.admincouse', compact('coses'));
     }
     public function addcose(Request $request)
@@ -182,47 +187,52 @@ class AdminController extends Controller
         }
 
         // Retrieve paginated data
-        $regists = $regists->paginate($perPage);
+        // $regists = $regists->paginate($perPage);
+        $regists = $regists->get();
         return view('admin.registdetail', compact('regists', 'search'));
     }
     public function upstatus(Request $request)
     {
-        $regist=Regist::where('id', $request->idreg)->first();
-        $user=User::where('id', '=',$regist['iduser'])->first();
+        $regist = Regist::where('regists.id', $request->idreg)
+            ->join('projects', 'projects.id', '=', 'regists.project')
+            ->join('courses', 'courses.id', '=', 'regists.course')
+            ->select('regists.*', 'projects.Projectname as project_name', 'courses.Cosename as course_name')
+            ->first();
+        $user = User::where('id', '=', $regist['iduser'])->first();
 
         $regist->update(
-                [
-                    'std_status' => $request->updstatus,
-                ]
-            );
-            switch ($request->updstatus) {
-                case 2:
-                  $status="ยื่นชำระเงินอีกครั้ง";
-                  break;
-                case 3:
-                    $status="ชำระเงินเรียบร้อยรอผลการสมัคร";
-                  break;
-                case 4:
-                    $status="ผ่าน";
-                  break;
-                default:
-                  //code block
-              }
-          
-            $email = $user['email'];
-            $name = $user['name'];
-            $SendMailData = [
-                'title' => 'แจ้งสถานะการสมัครเรียนผ่านระบบ '.env('APP_NAME'),
-                'body' => 'เรียนคุณ' . $name . ' ได้สมัครเรียนผ่านระบบ'.env('APP_NAME'),
-               
-                'status' => ':: ' .$status . '',
-                'URL' => 'ท่านสามารถตรวจสอบได้ทาง ' . env('APP_URL') . ' ข้อมูลผู้สมัคร',
-    
-            ];
-    
-            Mail::to($email)->send(new SendMail($SendMailData));
+            [
+                'std_status' => $request->updstatus,
+            ]
+        );
+        switch ($request->updstatus) {
+            case 2:
+                $status = "ยื่นชำระเงินอีกครั้ง";
+                break;
+            case 3:
+                $status = "ชำระเงินเรียบร้อยรอผลการสมัคร";
+                break;
+            case 4:
+                $status = "<strong>ผ่านการคัดเลือก</strong> <br>" . $regist->project_name . "<br><strong>หลักสูตร</strong> " . $regist->course_name . "<br>คณะวิทยาศาสตร์และนวัตกรรมดิจิทัล มหาวิทยาลัยทักษิณ";
+                break;
+            default:
+                //code block
+        }
 
-        return redirect()->back()->with('status', 'Updated Successfully'.$user['id']);
+        $email = $user['email'];
+        $name = $user['name'];
+        $SendMailData = [
+            'title' => 'แจ้งสถานะการสมัครเรียนผ่านระบบ Young Smart',
+            'body' => 'เรียนคุณ' . $name . ' ได้สมัครเรียนผ่านระบบ Young Smart',
+
+            'status' => ':: ' . $status . '',
+            'URL' => 'ท่านสามารถตรวจสอบได้ทาง https://sc.scidi.tsu.ac.th/youngsmart ข้อมูลผู้สมัคร',
+
+        ];
+
+        Mail::to($email)->send(new SendMail($SendMailData));
+
+        return redirect()->back()->with('status', 'Updated Successfully' . $user['id']);
 
     }
     public function Prteacher(Request $request)
@@ -249,11 +259,11 @@ class AdminController extends Controller
     public function CouseUpstatus(Request $request)
     {
         Course::where('id', $request->id)
-        ->update(
-            [
-                'status' => $request->status,
-            ]
-        );
+            ->update(
+                [
+                    'status' => $request->status,
+                ]
+            );
         return redirect()->back()->with('success', 'Updated Successfully');
     }
 
@@ -264,11 +274,44 @@ class AdminController extends Controller
             ->join('projects', 'projects.id', '=', 'regists.project')
             ->join('courses', 'courses.id', '=', 'regists.course')
             ->join('users', 'users.id', '=', 'regists.iduser')
-            ->select('regists.*', 'projects.Projectname as Projectname', 'courses.Cosename as Cosename', 'users.name as name', 'users.prefix as p' , 'users.idcard as idcard' , 'users.belong as belong','users.gread as gread','users.level as level','users.province as province','users.address as address','users.tel as tel','users.parent_tel as parent_tel','users.parent_name as parent_name')
+            ->select('regists.*', 'projects.Projectname as Projectname', 'courses.Cosename as Cosename', 'users.name as name', 'users.prefix as p', 'users.idcard as idcard', 'users.belong as belong', 'users.gread as gread', 'users.level as level', 'users.province as province', 'users.address as address', 'users.tel as tel', 'users.parent_tel as parent_tel', 'users.parent_name as parent_name')
             ->orderByDesc('regists.id')
             ->first();
 
         return view('admin.viewregistsdetail', compact('regists'));
+    }
+    public function deleteResponsible($id)
+    {
+        // Find the Responsible record by its id
+        $responsible = Responsible::find($id);
+
+        if ($responsible) {
+            // Delete the record
+            $responsible->delete();
+
+            // Redirect or return a response
+            return redirect()->route('admin.config')->with('success', 'Responsible deleted successfully');
+        } else {
+            return redirect()->route('admin.config')->with('error', 'Responsible not found');
+        }
+    }
+    public function deleteRegist($id)
+    {
+        $regist = Regist::find($id);
+
+        if ($regist) {
+            // Delete the record
+            $regist->delete();
+
+            // Redirect or return a response
+            return redirect()->route('admin.regist')->with('success', 'Regist deleted successfully');
+        } else {
+            return redirect()->route('admin.regist')->with('error', 'Regist not found');
+        }
+    }
+    public function adduser_teacher()
+    {
+        return view('admin.adduser_teacher');
     }
 
 }

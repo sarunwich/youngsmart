@@ -16,6 +16,12 @@
             <i class="fas fa-newspaper"></i>
             <span>ข่าวประกาศ</span></a>
     </li>
+    <li class="nav-item {{Route::is('admin.adduser_teacher') ? 'active' : ''}}">
+        <a class="nav-link " href="{{route('admin.adduser_teacher')}}">
+            {{-- <i class="fas fa-fw fa-chart-area"></i> --}}
+            <i class="fas fa-user-cog"></i>
+            <span>เพิ่มอาจารย์</span></a>
+    </li>
     <li class="nav-item {{Route::is('admin.config') ? 'active' : ''}}">
         <a class="nav-link " href="{{route('admin.config')}}">
             {{-- <i class="fas fa-fw fa-chart-area"></i> --}}
