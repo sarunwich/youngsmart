@@ -13,6 +13,7 @@ use Haruncpi\LaravelIdGenerator\IdGenerator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Response;
 
@@ -173,12 +174,36 @@ class AdminController extends Controller
         $perPage = 10; // Number of items to display per page
         $search = $request->input('search'); // Search keyword
 
-        $regists = Regist::query()
+        $regists = Regist::whereNull('regists.std_status')
             ->join('projects', 'projects.id', '=', 'regists.project')
             ->join('courses', 'courses.id', '=', 'regists.course')
             ->join('users', 'users.id', '=', 'regists.iduser')
             ->select('regists.*', 'projects.Projectname as Projectname', 'courses.Cosename as Cosename', 'users.name as name', 'users.prefix as p')
-            ->orderByDesc('id');
+            ->orderByDesc('id')->get();
+            $regists1 = Regist::where('regists.std_status','=','1')
+            ->join('projects', 'projects.id', '=', 'regists.project')
+            ->join('courses', 'courses.id', '=', 'regists.course')
+            ->join('users', 'users.id', '=', 'regists.iduser')
+            ->select('regists.*', 'projects.Projectname as Projectname', 'courses.Cosename as Cosename', 'users.name as name', 'users.prefix as p')
+            ->orderByDesc('id')->get();
+            $regists2 = Regist::where('regists.std_status','=',2)
+            ->join('projects', 'projects.id', '=', 'regists.project')
+            ->join('courses', 'courses.id', '=', 'regists.course')
+            ->join('users', 'users.id', '=', 'regists.iduser')
+            ->select('regists.*', 'projects.Projectname as Projectname', 'courses.Cosename as Cosename', 'users.name as name', 'users.prefix as p')
+            ->orderByDesc('id')->get();
+            $regists3 = Regist::where('regists.std_status','=',3)
+            ->join('projects', 'projects.id', '=', 'regists.project')
+            ->join('courses', 'courses.id', '=', 'regists.course')
+            ->join('users', 'users.id', '=', 'regists.iduser')
+            ->select('regists.*', 'projects.Projectname as Projectname', 'courses.Cosename as Cosename', 'users.name as name', 'users.prefix as p')
+            ->orderByDesc('id')->get();
+            $regists4 = Regist::where('regists.std_status','=',4)
+            ->join('projects', 'projects.id', '=', 'regists.project')
+            ->join('courses', 'courses.id', '=', 'regists.course')
+            ->join('users', 'users.id', '=', 'regists.iduser')
+            ->select('regists.*', 'projects.Projectname as Projectname', 'courses.Cosename as Cosename', 'users.name as name', 'users.prefix as p')
+            ->orderByDesc('id')->get();
 
         if ($search) {
             $regists->where('name', 'LIKE', '%' . $search . '%')
@@ -188,8 +213,8 @@ class AdminController extends Controller
 
         // Retrieve paginated data
         // $regists = $regists->paginate($perPage);
-        $regists = $regists->get();
-        return view('admin.registdetail', compact('regists', 'search'));
+        // $regists = $regists->get();
+        return view('admin.registdetail', compact('regists','regists1','regists2','regists3','regists4', 'search'));
     }
     public function upstatus(Request $request)
     {
@@ -311,7 +336,28 @@ class AdminController extends Controller
     }
     public function adduser_teacher()
     {
-        return view('admin.adduser_teacher');
+        $users = User::where('type', '=', 2)->get();
+        return view('admin.adduser_teacher', compact('users'));
+    }
+
+    public function addusertadb(Request $request)
+    {
+        $data = $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'password' => ['required', 'string', 'min:8', 'confirmed'],
+
+        ]);
+
+        User::create([
+
+            'name' => $data['name'],
+            'email' => $data['email'],
+            'type' => 2,
+            'password' => Hash::make($data['password']),
+        ]);
+        return redirect()->route('admin.adduser_teacher')->with('success', 'Add Teacher successfully');
+
     }
 
 }

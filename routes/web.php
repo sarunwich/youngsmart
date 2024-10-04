@@ -11,6 +11,7 @@ use App\Http\Controllers\AnnouncementController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TeacherResponsibleController;
+use App\Http\Controllers\CourseProjectController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -78,6 +79,7 @@ Route::middleware(['auth', 'user-access:admin'])->group(function () {
     })->name('dashboard');
     Route::get('admin/news',[PublicRelationController::class, 'index'])->name('admin.news');
     Route::post('addnew/addnew',[PublicRelationController::class, 'addnew'])->name('addnew.create');
+    Route::put('/new/{id}', [PublicRelationController::class, 'update'])->name('new.update');
     Route::delete('/data/{id}',[PublicRelationController::class,'destroy'])->name('data.destroy');
     Route::get('getfile/{path}/{file_name}', [AdminController::class, 'downloadFile']);
     Route::post('admin/PrUpstatus',[PublicRelationController::class, 'PrUpstatus']);
@@ -109,7 +111,14 @@ Route::middleware(['auth', 'user-access:admin'])->group(function () {
     Route::delete('/registdestroy/{id}', [AdminController::class, 'deleteRegist'])->name('regist.destroy');
 
     Route::get('admin/adduser_teacher',[AdminController::class, 'adduser_teacher'])->name('admin.adduser_teacher');
-   
+    Route::post('addusertadb', [AdminController::class, 'addusertadb'])->name('addusertadb');
+    
+    Route::get('course_project/create', [CourseProjectController::class, 'create'])->name('course_project.create');
+    Route::post('course_project/store', [CourseProjectController::class, 'store'])->name('course_project.store');
+    Route::get('course_project', [CourseProjectController::class, 'index'])->name('course_project.index');
+    Route::get('course_project/edit/{id}', [CourseProjectController::class, 'edit'])->name('course_project.edit');
+    Route::put('course_project/update/{id}', [CourseProjectController::class, 'update'])->name('course_project.update');
+    Route::delete('course_project/destroy/{id}', [CourseProjectController::class, 'destroy'])->name('course_project.destroy');
    
     
 });

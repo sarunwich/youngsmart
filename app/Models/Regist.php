@@ -28,7 +28,7 @@ class Regist extends Model
         'portfolio_file',
     ];
     public function course() {
-        return $this->belongsToMany(Course::class, 'course_regist', 'regist_id', 'course_id');
+        return $this->belongsToMany(Course::class,);
    }
    public function project() {
     return $this->belongsToMany(Project::class,);

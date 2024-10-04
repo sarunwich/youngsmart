@@ -44,6 +44,12 @@
             <i class="fas fa-graduation-cap"></i>
             <span>หลักสูตรที่เปิดรับ</span></a>
     </li>
+
+    <li class="nav-item {{Route::is('course_project.index') ? 'active' : ''}}">
+        <a class="nav-link" href="{{route('course_project.index')}}">
+            <i class="fas fa-graduation-cap"></i>
+            <span>จัดการหลักสูตรที่เปิดรับในโครงการ</span></a>
+    </li>
     <!-- Divider -->
     <hr class="sidebar-divider">
     <!-- Heading -->

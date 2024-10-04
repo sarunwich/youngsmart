@@ -30,7 +30,17 @@
                                         class="fa fa-plus-circle" aria-hidden="true"></i></samp></a>
                         </div>
                     </div>
-
+                    @if (session('success'))
+                    <script>
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Success',
+                            text: '{{ session('success') }}',
+                            showConfirmButton: false,
+                            timer: 2000
+                        });
+                    </script>
+                @endif
                     <div class="card-body">
                         <span id="addnew" class="customhidden">
                             <div class="col-md-12">
@@ -76,7 +86,7 @@
                     </div>
                 </div>
                 <div class="col-md-12">
-                    <table id="example" class="table table-striped table-responsive" >
+                    <table id="example" class="table table-striped table-responsive">
                         <thead>
                             <tr>
                                 <th>ลำดับที่</th>
@@ -95,10 +105,10 @@
                                     <td>{{ $new->pr_title }}</td>
                                     <td class="w-25">
                                         <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                                                        data-bs-target="#detailModal{{ $key }}">
-                                                        View Details
-                                                    </button>
-                                       
+                                            data-bs-target="#detailModal{{ $key }}">
+                                            View Details
+                                        </button>
+
                                         {{-- <pre>{{ $new->pr_detail }}</pre> --}}
                                     </td>
                                     <td>{{ $new->pr_date }}</td>
@@ -137,27 +147,45 @@
                                 </tr>
                                 <!-- Modal detail-->
                                 <div class="modal fade" id="detailModal{{ $key }}" tabindex="-1"
-                                aria-labelledby="detailModalLabel{{ $key }}" aria-hidden="true">
-                                <div class="modal-dialog modal-xl">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title"
-                                                id="detailModalLabel{{ $key }}">รายละเอียด
-                                            </h5>
-                                            <button type="button" class="btn-close"
-                                                data-bs-dismiss="modal" aria-label="Close"></button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <div id="summernote{{ $key }}"
-                                                class="summernote-content"> {!!$new->pr_detail !!}</div>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary"
-                                                data-bs-dismiss="modal">Close</button>
+                                    aria-labelledby="detailModalLabel{{ $key }}" aria-hidden="true">
+                                    <div class="modal-dialog modal-xl">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="detailModalLabel{{ $key }}">รายละเอียด
+                                                </h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-label="Close"></button>
+                                            </div>
+                                            <form action="{{ route('new.update', $new->id) }}" method="POST"
+                                                enctype="multipart/form-data">
+                                                @csrf
+                                                @method('PUT') <!-- Use PUT or PATCH for updating -->
+                                                <div class="modal-body">
+                                                    <div class="form-group">
+                                                        <label for="formGroupExampleInput">หัวข้อข่าว/ประชาสัมพันธ์</label>
+                                                        <input type="text" class="form-control" id="pr_title" required
+                                                            name="pr_title" placeholder="หัวข้อข่าว/ประชาสัมพันธ์"
+                                                            value="{{ $new->pr_title }}">
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label
+                                                            for="formGroupExampleInput2">รายละเอียดของข่าว/ประชาสัมพันธ์</label>
+                                                        <textarea class="form-control summernote" id="pr_detail" name="pr_detail"
+                                                            placeholder="รายละเอียดของข่าว/ประชาสัมพันธ์" rows="3">  {{ $new->pr_detail }}
+                                                </textarea>
+                                                    </div>
+
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="submit" class="btn btn-primary">Save
+                                                        Changes</button>
+                                                    <button type="button" class="btn btn-secondary"
+                                                        data-bs-dismiss="modal">Close</button>
+                                                </div>
+                                            </form>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
                             @endforeach
                         </tbody>
                     </table>
@@ -173,6 +201,14 @@
         $(document).ready(function() {
             $('#pr_detail').summernote({
                 height: 450,
+            });
+
+
+        });
+        $('.modal').on('shown.bs.modal', function() {
+            $(this).find('.summernote').summernote({
+                height: 450, // Set the height of the editor
+                focus: true // Set focus to the editable area after initializing summernote
             });
         });
     </script>

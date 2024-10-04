@@ -12,7 +12,7 @@ class Course extends Model
         'Cosename',
         'Cosefile',
         'datestart',
-        'dateend'
+        'dateend',
     ];
 
     // Define the relationship to the users
@@ -29,5 +29,14 @@ class Course extends Model
     public function regists()
     {
         return $this->belongsToMany(Regist::class, 'course_regist', 'course_id', 'regist_id');
+    }
+
+    // public function projects()
+    // {
+    //     return $this->belongsToMany(Project::class, 'course_projects')->using(CourseProject::class);
+    // }
+    public function projects()
+    {
+        return $this->belongsToMany(Project::class, 'course_projects');
     }
 }

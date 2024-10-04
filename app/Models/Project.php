@@ -17,4 +17,12 @@ class Project extends Model
         'year',
         'status',
     ];
+    // public function courses()
+    // {
+    //     return $this->belongsToMany(Course::class, 'course_projects')->using(CourseProject::class);
+    // }
+    public function courses()
+    {
+        return $this->belongsToMany(Course::class, 'course_projects');
+    }
 }

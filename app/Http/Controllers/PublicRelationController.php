@@ -125,6 +125,7 @@ class PublicRelationController extends Controller
     public function edit(PublicRelation $publicRelation)
     {
         //
+        
     }
 
     /**
@@ -134,9 +135,16 @@ class PublicRelationController extends Controller
      * @param  \App\Models\PublicRelation  $publicRelation
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, PublicRelation $publicRelation)
+    public function update(Request $request, $id)
     {
         //
+        $PublicRelation=PublicRelation::find($id);
+        $PublicRelation->pr_title = $request->input('pr_title');
+        $PublicRelation->pr_detail = $request->input('pr_detail');
+        $PublicRelation->save();
+
+        return redirect()->back()->with('success', 'Updated successfully');
+    
     }
 
     /**

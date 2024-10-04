@@ -145,7 +145,7 @@
         </div>
         <div class="col-6 mb-4">
             <label class="form-label">ผลการเรียน</label>
-            @if (isset($regists->guidance_teacher))
+            @if (isset($regists->school_record))
             <iframe src="{{ asset('storage/customFile/' . $regists->school_record) }}" style="width:100%; height:90%;"
                 frameborder="0"></iframe>
             <div>
@@ -163,7 +163,7 @@
     <div class="row">
         <div class="col-6 mb-4">
             <label class="form-label">ไฟล์ผลงาน</label>
-            @if (isset($regists->guidance_teacher))
+            @if (isset($regists->portfolio_file))
                 <iframe src="{{ asset('storage/portfolio_file/' . $regists->portfolio_file) }}"
                     style="width:100%; height:600px;" frameborder="0"></iframe>
                 <div>
